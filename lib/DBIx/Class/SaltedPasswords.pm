@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Digest::MD5 qw( md5_hex );
 
-our $VERSION = '0.02';
+our $VERSION = '0.02001';
 
 __PACKAGE__->mk_classdata( 'salted_enabled'     => 1 );
 __PACKAGE__->mk_classdata( 'salted_column'      => "" );
@@ -143,7 +143,7 @@ The following L<DBIx::Class::Row> methods are extended by this module:-
 =head1 SEE ALSO
 
 L<DBIx::Class>
-L<DBIx::Class::ColumnsDigest>
+L<DBIx::Class::DigestColumns>
 
 =head1 AUTHOR
 
