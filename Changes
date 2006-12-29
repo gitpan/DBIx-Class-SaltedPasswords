@@ -1,5 +1,8 @@
 Revision history for Perl extension DBIx::Class::SaltedPasswords.
 
+0.03  Fri Dec 29 22:43:44 2006
+    - fixed issue with resalting already salted column
+
 0.01  Tue Dec 19 04:41:51 2006
 	- original version; created by h2xs 1.23 with options
 		-XA -n DBIx::Class::SaltedPasswords

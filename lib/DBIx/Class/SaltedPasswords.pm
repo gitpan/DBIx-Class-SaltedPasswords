@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Digest::MD5 qw( md5_hex );
 
-our $VERSION = '0.02001';
+our $VERSION = '0.03000';
 
 __PACKAGE__->mk_classdata( 'salted_enabled'     => 1 );
 __PACKAGE__->mk_classdata( 'salted_column'      => "" );
@@ -42,7 +42,7 @@ sub insert {
 ## copy of insert
 sub update {
 	my $self = shift;
-	if ( $self->salted_enabled ) {
+	if ( $self->salted_enabled && !$self->is_column_changed( $self->salted_column ) &&  $self->in_storage ) {
 		my $salt;
 		$salt .= ( 'a' .. 'z', 'A' .. 'Z', 0 .. 9 )[ int( rand() * 62 ) ]
 		  for ( 1 .. $self->salted_salt_length );
@@ -88,7 +88,7 @@ DBIx::Class::SaltedPasswords - Salts password columns
 
 =head1 DESCRIPTION
 
-This module generates for every insert or update of a specified column a random salt, adds it to the value and hashes the completet string with MD5.
+This module generates for every insert or update of a specified column a random salt, adds it to the value and hashes the complete string with MD5.
 The salt is stored in the salt_column column.
 To verify a password against the table use the verify_password method.
 
@@ -115,7 +115,7 @@ In your application:
 This registers a new user with a crypted password ($password is plaintext, the encryption is done by this module). Make sure the salt column exists.
 
   my $rs = $db->resultset('User')->search({name => 'Paul'})->first; # Or use find() and your primary key
-  $rs->verify_password('secret');                                   # return 1 if the password is right
+  $rs->verify_password('secret');                                   # returns 1 if the password is right
 
 This validates the password
 
@@ -127,7 +127,7 @@ The following methods are new:-
 
 =item verify_password
 
-return 1 if the password is right, 0 else.
+returns 1 if the password is right, 0 else.
 
 =head1 EXTENDED METHODS
 
