@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Digest::MD5 qw( md5_hex );
 
-our $VERSION = '0.03000';
+our $VERSION = '0.03001';
 
 __PACKAGE__->mk_classdata( 'salted_enabled'     => 1 );
 __PACKAGE__->mk_classdata( 'salted_column'      => "" );
@@ -42,7 +42,9 @@ sub insert {
 ## copy of insert
 sub update {
 	my $self = shift;
-	if ( $self->salted_enabled && !$self->is_column_changed( $self->salted_column ) &&  $self->in_storage ) {
+	if (   $self->salted_enabled
+		&& $self->is_column_changed( $self->salted_column ) )
+	{
 		my $salt;
 		$salt .= ( 'a' .. 'z', 'A' .. 'Z', 0 .. 9 )[ int( rand() * 62 ) ]
 		  for ( 1 .. $self->salted_salt_length );
